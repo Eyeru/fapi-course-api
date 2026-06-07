@@ -1,7 +1,5 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from app.models.course import Course
-from app.models.user import User
 from app.models import Base
 
 

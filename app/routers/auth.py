@@ -4,9 +4,10 @@ from sqlalchemy.orm import Session
 from datetime import timedelta
 from database import get_db
 from app.models import User
+from app.core.security import decode_token
 from app.schemas.auth_schemas import UserCreate, UserResponse, Token
-from app.core.security import create_access_token, hash_password, verify_password
-from app.core.security import ACCESS_TOKEN_EXPIRE_MINUTES
+from app.core.security import create_access_token, hash_password
+from app.core.security import verify_password, ACCESS_TOKEN_EXPIRE_MINUTES
 router = APIRouter(prefix="/auth", tags=["authentication"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
@@ -65,7 +66,6 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(),
 
 def get_current_user(token: str = Depends(oauth2_scheme),
                      db: Session = Depends(get_db)):
-    from app.core.security import decode_token
 
     payload = decode_token(token)
     if payload is None:
@@ -92,3 +92,10 @@ def get_current_user(token: str = Depends(oauth2_scheme),
         )
 
     return user
+
+
+@router.get("/me", response_model=UserResponse)
+def read_users_me(
+    current_user: User = Depends(get_current_user)
+):
+    return current_user
