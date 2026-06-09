@@ -6,11 +6,11 @@ SECRET_KEY = "super-secret-key"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-# Use sha256_crypt instead of bcrypt (no external dependencies needed)
+# Used sha256_crypt for better security and performance compared to bcrypt
 pwd_context = CryptContext(
     schemes=["sha256_crypt"],
     deprecated="auto",
-    sha256_crypt__rounds=10000,  # Number of hashing rounds
+    sha256_crypt__rounds=10000,
 )
 
 

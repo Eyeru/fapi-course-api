@@ -8,9 +8,10 @@ print("=" * 50)
 # 1. Register user
 print("\n1. Registering user...")
 user_data = {
-    "username": "bob",
-    "email": "bob@example.com",
-    "password": "bob123"
+  "username": "admin1",
+  "email": "admin@example.com",
+  "password": "secret123",
+  "role": "admin"
 }
 response = requests.post(f"{BASE_URL}/auth/register", json=user_data)
 print(f"   Status: {response.status_code}")

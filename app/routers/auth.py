@@ -31,7 +31,8 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     db_user = User(
         username=user.username,
         email=user.email,
-        hashed_password=hashed_password
+        hashed_password=hashed_password,
+        role=user.role
     )
 
     db.add(db_user)
@@ -58,7 +59,11 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(),
     # Create access token
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
+        data={
+            "sub": user.username,
+            "role": user.role
+        },
+        expires_delta=access_token_expires
     )
 
     return {"access_token": access_token, "token_type": "bearer"}
@@ -92,6 +97,18 @@ def get_current_user(token: str = Depends(oauth2_scheme),
         )
 
     return user
+
+
+def require_admin(
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(
+            status_code=403,
+            detail="Admin access required"
+        )
+
+    return current_user
 
 
 @router.get("/me", response_model=UserResponse)
