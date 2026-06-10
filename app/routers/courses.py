@@ -9,7 +9,6 @@ from app.schemas.course_schemas import (
     CourseResponse
 )
 from app.routers.auth import require_admin
-from app.services.course_service import get_courses
 from app.services.course_service import (
     get_courses,
     get_course_statistics
@@ -52,6 +51,7 @@ def get_all_courses(
     skip: int = Query(0, ge=0),
     limit: int = Query(10, ge=1, le=100),
     credit: int | None = None,
+    name: str | None = None,
     sort: str | None = None,
     db: Session = Depends(get_db),
 ):
@@ -60,6 +60,7 @@ def get_all_courses(
         skip=skip,
         limit=limit,
         credit=credit,
+        name=name,
         sort=sort
     )
 
@@ -97,7 +98,7 @@ def get_course(
 
     if not course:
         raise HTTPException(
-            status_code=404,
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="Course not found"
         )
 

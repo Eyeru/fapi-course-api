@@ -1,6 +1,6 @@
 from passlib.context import CryptContext
 from jose import jwt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 SECRET_KEY = "super-secret-key"
 ALGORITHM = "HS256"
@@ -17,11 +17,11 @@ pwd_context = CryptContext(
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
     if expires_delta is None:
-        expire = datetime.utcnow() + timedelta(
+        expire = datetime.now(timezone.utc) + timedelta(
             minutes=ACCESS_TOKEN_EXPIRE_MINUTES
         )
     else:
-        expire = datetime.utcnow() + expires_delta
+        expire = datetime.now(timezone.utc) + expires_delta
 
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)

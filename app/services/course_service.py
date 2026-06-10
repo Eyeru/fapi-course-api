@@ -10,6 +10,7 @@ def get_courses(
     skip: int = 0,
     limit: int = 10,
     credit: int | None = None,
+    name: str | None = None,
     sort: str | None = None
 ):
     query = db.query(Course)
@@ -17,6 +18,11 @@ def get_courses(
     if credit is not None:
         query = query.filter(
             Course.credit == credit
+        )
+
+    if name:
+        query = query.filter(
+            Course.name.contains(name)
         )
 
     if sort == "name":
