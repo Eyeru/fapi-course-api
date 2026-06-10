@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Index
 from app.models.base import Base
+from sqlalchemy.orm import relationship
 
 
 class Course(Base):
@@ -11,4 +12,9 @@ class Course(Base):
 
     __table_args__ = (
         Index('idx_name_credit', 'name', 'credit'),
+    )
+
+    enrollments = relationship(
+        "Enrollment",
+        back_populates="course"
     )

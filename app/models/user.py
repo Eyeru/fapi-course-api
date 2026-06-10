@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String
 from app.models.base import Base
+from sqlalchemy.orm import relationship
 
 
 class User(Base):
@@ -10,3 +11,8 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     role = Column(String, default="student")
+
+    enrollments = relationship(
+        "Enrollment",
+        back_populates="student"
+    )

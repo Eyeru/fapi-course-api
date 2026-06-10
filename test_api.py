@@ -23,8 +23,8 @@ else:
 # 2. Login
 print("\n2. Logging in...")
 login_data = {
-    "username": "bob",
-    "password": "bob123"
+    "username": "admin1",
+    "password": "secret123"
 }
 response = requests.post(f"{BASE_URL}/auth/token", data=login_data)
 if response.status_code == 200:

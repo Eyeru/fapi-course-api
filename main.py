@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
-
+from app.routers.enrollments import router as enrollments_router
 from app.routers import auth
 from app.routers.courses import router as courses_router
 
@@ -8,6 +8,7 @@ app = FastAPI()
 
 app.include_router(auth.router)
 app.include_router(courses_router)
+app.include_router(enrollments_router)
 
 
 @app.exception_handler(HTTPException)
