@@ -6,7 +6,10 @@ from app.models.course import Course
 from app.models.enrollment import Enrollment
 from app.models.user import User
 from app.routers.auth import get_current_user
-from app.schemas.enrollment_schemas import EnrollmentResponse
+from app.schemas.enrollment_schemas import (
+    EnrollmentResponse,
+    MyCourseResponse
+)
 
 router = APIRouter(
     prefix="/enrollments",
@@ -63,3 +66,56 @@ def enroll_in_course(
     db.refresh(new_enrollment)
 
     return new_enrollment
+@router.get(
+    "/me",
+    response_model=list[MyCourseResponse]
+)
+def get_my_courses(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    enrollments = db.query(Enrollment).filter(
+        Enrollment.student_id == current_user.id
+    ).all()
+
+    result = []
+
+    for enrollment in enrollments:
+        result.append(
+            MyCourseResponse(
+                course_id=enrollment.course.id,
+                course_name=enrollment.course.name,
+                credit=enrollment.course.credit
+            )
+        )
+
+    return result
+
+
+@router.delete("/{course_id}")
+def withdraw_from_course(
+    course_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "student":
+        raise HTTPException(
+            status_code=403,
+            detail="Only students can withdraw from courses"
+        )
+
+    enrollment = db.query(Enrollment).filter(
+        Enrollment.student_id == current_user.id,
+        Enrollment.course_id == course_id
+    ).first()
+
+    if not enrollment:
+        raise HTTPException(
+            status_code=404,
+            detail="Enrollment not found"
+        )
+
+    db.delete(enrollment)
+    db.commit()
+
+    return {"message": "Successfully withdrawn from course"}

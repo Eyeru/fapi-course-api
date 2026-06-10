@@ -12,3 +12,8 @@ class EnrollmentResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class MyCourseResponse(BaseModel):
+    course_id: int
+    course_name: str
+    credit: int
