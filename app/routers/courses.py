@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends, status, HTTPException
+from fastapi import APIRouter, Depends, Query, status, HTTPException
 from sqlalchemy.orm import Session
-
+from sqlalchemy import desc
 from database import get_db
 from app.models.course import Course
 from app.models.user import User
@@ -9,6 +9,16 @@ from app.schemas.course_schemas import (
     CourseResponse
 )
 from app.routers.auth import require_admin
+from app.services.course_service import get_courses
+from app.services.course_service import (
+    get_courses,
+    get_course_statistics
+)
+
+from app.schemas.stats_schemas import (
+    CourseStatsResponse
+)
+
 
 router = APIRouter(
     prefix="/courses",
@@ -38,9 +48,20 @@ def add_course(
 
 
 @router.get("", response_model=list[CourseResponse])
-def get_all_courses(db: Session = Depends(get_db)):
-    courses = db.query(Course).all()
-    return courses
+def get_all_courses(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(10, ge=1, le=100),
+    credit: int | None = None,
+    sort: str | None = None,
+    db: Session = Depends(get_db),
+):
+    return get_courses(
+        db=db,
+        skip=skip,
+        limit=limit,
+        credit=credit,
+        sort=sort
+    )
 
 
 @router.get("/search", response_model=list[CourseResponse])
@@ -54,6 +75,16 @@ def search_course(
 
     return courses
 
+
+@router.get(
+    "/stats",
+    response_model=list[CourseStatsResponse]
+)
+def course_statistics(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_admin)
+):
+    return get_course_statistics(db)
 
 @router.get("/{course_id}", response_model=CourseResponse)
 def get_course(
