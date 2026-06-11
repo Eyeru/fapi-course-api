@@ -68,3 +68,28 @@ def test_student_cannot_delete_course(student_token):
     )
 
     assert response.status_code == 403
+
+
+def test_admin_can_delete_course(admin_token):
+
+    create_response = client.post(
+        "/courses",
+        json={
+            "name": "Temporary Course",
+            "credit": 3
+        },
+        headers={
+            "Authorization": f"Bearer {admin_token}"
+        }
+    )
+
+    course_id = create_response.json()["id"]
+
+    delete_response = client.delete(
+        f"/courses/{course_id}",
+        headers={
+            "Authorization": f"Bearer {admin_token}"
+        }
+    )
+
+    assert delete_response.status_code == 200
