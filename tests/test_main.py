@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 from main import app
+from app.models.course import Course
 
 client = TestClient(app)
 
@@ -16,7 +17,7 @@ def test_login():
     response = client.post(
         "/auth/token",
         data={
-            "username": "pt",
+            "username": "test_admin",
             "password": "1234"
         }
     )
@@ -93,3 +94,24 @@ def test_admin_can_delete_course(admin_token):
     )
 
     assert delete_response.status_code == 200
+
+
+def test_db_fixture(db):
+
+    assert db is not None
+
+def test_create_course_in_db(db):
+
+    course = Course(
+        name="Rollback Test",
+        credit=3
+    )
+
+    db.add(course)
+    db.commit()
+
+    found = db.query(Course).filter(
+        Course.name == "Rollback Test"
+    ).first()
+
+    assert found is not None
