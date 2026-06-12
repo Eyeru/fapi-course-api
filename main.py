@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from app.routers.enrollments import router as enrollments_router
 from app.routers import auth
 from app.routers.courses import router as courses_router
+from app.core.logger import logger
 
 app = FastAPI()
 
@@ -21,6 +22,7 @@ async def http_exception_handler(request: Request, exc: HTTPException):
 
 @app.exception_handler(Exception)
 async def general_exception_handler(request: Request, exc: Exception):
+    logger.error(f"Unhandled exception: {exc} at {request.url}")
     return JSONResponse(
         status_code=500,
         content={"detail": "Internal server error", "path": str(request.url)}

@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, Query, status, HTTPException
 from sqlalchemy.orm import Session
-from sqlalchemy import desc
 from database import get_db
 from app.models.course import Course
 from app.models.user import User
@@ -17,7 +16,7 @@ from app.services.course_service import (
 from app.schemas.stats_schemas import (
     CourseStatsResponse
 )
-
+from app.core.logger import logger
 
 router = APIRouter(
     prefix="/courses",
@@ -42,6 +41,8 @@ def add_course(
     db.add(new_course)
     db.commit()
     db.refresh(new_course)
+
+    logger.info(f"Course created: {new_course.name} (ID: {new_course.id}) by user {current_user.username}")
 
     return new_course
 
@@ -85,6 +86,7 @@ def course_statistics(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_admin)
 ):
+    logger.info(f"Fetching course statistics by user {current_user.username}")
     return get_course_statistics(db)
 
 @router.get("/{course_id}", response_model=CourseResponse)
@@ -115,6 +117,7 @@ def delete_course(
     ).first()
 
     if course:
+        logger.info(f"Course deleted: {course.name} (ID: {course.id}) by user {current_user.username}") 
         db.delete(course)
         db.commit()
         return {"message": "Course deleted"}

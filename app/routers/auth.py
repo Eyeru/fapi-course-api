@@ -8,6 +8,8 @@ from app.core.security import decode_token
 from app.schemas.auth_schemas import UserCreate, UserResponse, Token
 from app.core.security import create_access_token, hash_password
 from app.core.security import verify_password, ACCESS_TOKEN_EXPIRE_MINUTES
+from app.core.logger import logger
+
 router = APIRouter(prefix="/auth", tags=["authentication"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
@@ -50,6 +52,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(),
 
     if not user or not verify_password(form_data.password,
                                        user.hashed_password):
+        logger.warning("Failed login attempt with incorrect username or password")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
@@ -65,6 +68,8 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(),
         },
         expires_delta=access_token_expires
     )
+
+    logger.info(f"User '{user.username}' logged in successfully")
 
     return {"access_token": access_token, "token_type": "bearer"}
 
@@ -103,11 +108,13 @@ def require_admin(
     current_user: User = Depends(get_current_user)
 ):
     if current_user.role != "admin":
+        logger.warning(f"Unauthorized access attempt by user '{current_user.username}' with role '{current_user.role}'")
         raise HTTPException(
             status_code=403,
             detail="Admin access required"
         )
 
+    logger.info(f"Admin access granted to user '{current_user.username}'")
     return current_user
 
 
@@ -115,4 +122,5 @@ def require_admin(
 def read_users_me(
     current_user: User = Depends(get_current_user)
 ):
+    logger.info(f"Fetching user information for '{current_user.username}'")
     return current_user

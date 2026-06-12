@@ -1,0 +1,3 @@
+2026-06-12 14:58:33,485 - app.core.logger - INFO - Application started
+2026-06-12 14:58:33,486 - app.core.logger - WARNING - Test warning
+2026-06-12 14:58:33,486 - app.core.logger - ERROR - Test error
