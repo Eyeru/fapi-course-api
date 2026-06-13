@@ -8,3 +8,16 @@
 2026-06-13 07:07:25,794 - app.core.logger - INFO - Admin access granted to user 'admin1'
 2026-06-13 07:07:25,801 - app.core.logger - INFO - Course deleted: os (ID: 13) by user admin1
 2026-06-13 08:26:07,312 - app.core.logger - INFO - File uploaded: Chapter Five.pdf
+2026-06-13 09:43:47,040 - app.core.logger - INFO - User 'admin1' logged in successfully
+2026-06-13 10:05:11,420 - app.core.logger - INFO - User 'instructor1' logged in successfully
+2026-06-13 10:06:26,089 - app.core.logger - INFO - Instructor access granted to user 'instructor1'
+2026-06-13 10:06:26,108 - app.core.logger - INFO - Course created: Software Engineering (ID: 14) by user instructor1
+2026-06-13 10:07:01,552 - app.core.logger - INFO - User 'pt' logged in successfully
+2026-06-13 10:07:14,173 - app.core.logger - INFO - Instructor access granted to user 'pt'
+2026-06-13 10:07:14,179 - app.core.logger - INFO - Course created: Software Engineering (ID: 15) by user pt
+2026-06-13 10:08:04,623 - app.core.logger - WARNING - Failed login attempt with incorrect username or password
+2026-06-13 10:09:55,206 - app.core.logger - WARNING - Failed login attempt with incorrect username or password
+2026-06-13 10:09:57,082 - app.core.logger - WARNING - Failed login attempt with incorrect username or password
+2026-06-13 10:10:42,594 - app.core.logger - INFO - User 'admin1' logged in successfully
+2026-06-13 10:11:41,835 - app.core.logger - INFO - User 'st' logged in successfully
+2026-06-13 10:12:03,954 - app.core.logger - WARNING - Unauthorized instructor access attempt by user 'st' with role 'student'

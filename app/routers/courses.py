@@ -7,7 +7,7 @@ from app.schemas.course_schemas import (
     CourseCreate,
     CourseResponse
 )
-from app.routers.auth import require_admin
+from app.routers.auth import get_current_user, require_instructor, require_admin
 from app.services.course_service import (
     get_courses,
     get_course_statistics
@@ -31,7 +31,7 @@ router = APIRouter(
 def add_course(
     course: CourseCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_admin)
+    current_user: User = Depends(require_instructor)
 ):
     new_course = Course(
         name=course.name,
@@ -110,7 +110,7 @@ def get_course(
 def delete_course(
     course_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_admin)
+    current_user: User = Depends(require_instructor)
 ):
     course = db.query(Course).filter(
         Course.id == course_id
@@ -133,7 +133,7 @@ def update_course(
     course_id: int,
     updated_course: CourseCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_admin)
+    current_user: User = Depends(require_instructor)
 ):
     course = db.query(Course).filter(
         Course.id == course_id

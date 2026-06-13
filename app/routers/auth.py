@@ -118,6 +118,27 @@ def require_admin(
     return current_user
 
 
+def require_instructor(
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role not in ["admin", "instructor"]:
+
+        logger.warning(
+            f"Unauthorized instructor access attempt by user '{current_user.username}' with role '{current_user.role}'"
+        )
+
+        raise HTTPException(
+            status_code=403,
+            detail="Instructor access required"
+        )
+
+    logger.info(
+        f"Instructor access granted to user '{current_user.username}'"
+    )
+
+    return current_user
+
+
 @router.get("/me", response_model=UserResponse)
 def read_users_me(
     current_user: User = Depends(get_current_user)
