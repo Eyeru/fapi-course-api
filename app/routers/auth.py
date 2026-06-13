@@ -10,7 +10,7 @@ from app.core.security import create_access_token, hash_password
 from app.core.security import verify_password, ACCESS_TOKEN_EXPIRE_MINUTES
 from app.core.logger import logger
 
-router = APIRouter(prefix="/auth", tags=["authentication"])
+router = APIRouter(prefix="/auth", tags=["Authentication"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
 

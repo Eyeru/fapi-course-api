@@ -1,3 +1,10 @@
 2026-06-12 14:58:33,485 - app.core.logger - INFO - Application started
 2026-06-12 14:58:33,486 - app.core.logger - WARNING - Test warning
 2026-06-12 14:58:33,486 - app.core.logger - ERROR - Test error
+2026-06-13 06:58:03,620 - app.core.logger - INFO - User 'pt' logged in successfully
+2026-06-13 06:58:50,319 - app.core.logger - INFO - User 'admin1' logged in successfully
+2026-06-13 07:06:52,751 - app.core.logger - INFO - Admin access granted to user 'admin1'
+2026-06-13 07:06:52,783 - app.core.logger - INFO - Course created: os (ID: 13) by user admin1
+2026-06-13 07:07:25,794 - app.core.logger - INFO - Admin access granted to user 'admin1'
+2026-06-13 07:07:25,801 - app.core.logger - INFO - Course deleted: os (ID: 13) by user admin1
+2026-06-13 08:26:07,312 - app.core.logger - INFO - File uploaded: Chapter Five.pdf

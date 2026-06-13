@@ -20,7 +20,7 @@ from app.core.logger import logger
 
 router = APIRouter(
     prefix="/courses",
-    tags=["courses"]
+    tags=["Courses"]
 )
 
 @router.post(

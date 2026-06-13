@@ -13,7 +13,7 @@ from app.schemas.enrollment_schemas import (
 
 router = APIRouter(
     prefix="/enrollments",
-    tags=["enrollments"]
+    tags=["Enrollments"]
 )
 
 @router.post(
